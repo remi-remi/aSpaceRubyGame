@@ -22,6 +22,6 @@ class Asteroid
     @y = -30
     @angle = rand(0..360)
   end
-
+  
 
 end

@@ -5,7 +5,6 @@ class PlayerShip
     @x = x
     @y = y
     @image = Gosu::Image.new("../sprite/ship.png")
-    set_alpha(0)
   end
 
   def update
@@ -29,10 +28,6 @@ class PlayerShip
 
   def draw
     @image.draw(@x, @y, 0)
-  end
-
-  def set_alpha(alpha)
-    @image. = alpha
   end
 
 end

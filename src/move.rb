@@ -4,6 +4,7 @@ require 'thread'
 
 require_relative 'Asteroid'
 require_relative 'PlayerShip'
+require_relative 'Lifes'
 
 SPEED = 5
 $totalRoids = 0
@@ -27,6 +28,7 @@ class GameWindow < Gosu::Window
     @clap = Gosu::Sample.new("../ost/choc1.wav")
     @boom = Gosu::Sample.new("../ost/end.mp3")
     @song.play(true)
+    @life = Lifes.new()
     Thread.new do
       sleep 1
       loop do
@@ -37,13 +39,6 @@ class GameWindow < Gosu::Window
   end
 
   def update
-
-    #if Gosu.button_down?(Gosu::KbP)
-    #  sleep 1
-    #  while ! Gosu.button_down?(Gosu::KbP)
-    #       PAUSE SYSTEM
-    #  end
-    #  end
 
     if $canSpawn && $totalRoids < $maxRoid && $roidPart1
       $totalRoids += 1
@@ -106,6 +101,7 @@ class GameWindow < Gosu::Window
         roid.draw
       end
       @player.draw
+
     end
   end
 end
