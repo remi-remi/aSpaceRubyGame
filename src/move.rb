@@ -20,19 +20,17 @@ $lifeRemaining = 3
 class GameWindow < Gosu::Window
 
   def initialize
-    super 640, 480  #, fullscreen: true
+    super 1920, 1080  , fullscreen: true
     @player = PlayerShip.new(320, 240) # INSTANCE et spawn du joueur
     @start_time = Gosu.milliseconds
     @time_elapsed = 0
     @spawn_speed = 3 # Ajout du compteur à 0.2 secondes
     @spawn_timer = 0 # Initialisation du compteur
     @song = Gosu::Song.new("../ost/airwolf2.mp3")
-    @clap = Gosu::Sample.new("../ost/choc1.wav")
     @boom = Gosu::Sample.new("../ost/end.mp3")
     @interfaceFont = Gosu::Font.new(19, name: "../font/joystixMonospace.otf")
     @song.play(true)
     @lifeInterface = Lifes.new()
-    @lifeInterface.setLifeRemaining($lifeRemaining)
     Thread.new do
       sleep 1
       loop do
@@ -47,7 +45,6 @@ class GameWindow < Gosu::Window
     if $canSpawn && $totalRoids < $maxRoid && $roidPart1
       $totalRoids += 1
       $asteroids << Asteroid.new()
-      #puts "total roids: #{$totalRoids}    maxRoid: #{$maxRoid}   spawn_speed: #{@spawn_speed}"
       $canSpawn = false
     end
 
@@ -55,19 +52,7 @@ class GameWindow < Gosu::Window
 
     $asteroids.each do |asteroid|
       asteroid.update
-      if Gosu.distance(@player.x, @player.y+4, asteroid.x, asteroid.y) < 10 && $invincible == false
-        puts "test"
-        $lifeRemaining -= 1
-        @lifeInterface.setLifeRemaining($lifeRemaining)
-        $asteroids.delete(asteroid)
-        @clap.play
-        Thread.new do
-          $invincible = true
-          sleep 3
-          $invincible = false
-        end
-      end
-      if asteroid.y >= 480
+      if asteroid.y >= 1080 or @player.collision?(asteroid) == true
         asteroid.reset
         $score += 1
 
@@ -95,22 +80,23 @@ class GameWindow < Gosu::Window
   end
 
   def draw
+
     if $lifeRemaining <= 0
       $asteroids.each do |roid|
         $asteroids.delete(roid)
       end
       @song.pause
       @boom.play
-      self.caption = "GAME OVER   SCORE : #{$score*0.4}"
       sleep 10
       exit
     else
+
       $asteroids.each do |roid|
         roid.draw
       end
 
       @player.draw
-      @lifeInterface.draw
+      @lifeInterface.draw($lifeRemaining)
       case
       when $score < 10
         @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 540, 8, 0, 1, 1, Gosu::Color::WHITE)
@@ -128,7 +114,6 @@ class GameWindow < Gosu::Window
 
     end
 
-    # print a hello world
   end
 
 end

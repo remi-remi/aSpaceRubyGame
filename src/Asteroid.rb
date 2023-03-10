@@ -2,7 +2,7 @@ class Asteroid
   attr_reader :x, :y, :speed, :angle
 
   def initialize()
-    @x = rand(0..640)
+    @x = rand(0..1920)
     @y = -30
     case rand(1..4)
     when 1
@@ -27,7 +27,7 @@ class Asteroid
   end
 
   def reset
-    @x = rand(0..640)
+    @x = rand(0..1920)
     @y = -30
     @angle = rand(0..360)
   end
