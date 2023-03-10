@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'gosu'
 require 'thread'
+require 'yaml'
 
 require_relative 'Asteroid'
 require_relative 'PlayerShip'
@@ -8,8 +9,10 @@ require_relative 'Interface'
 require_relative 'DataClass'
 require_relative 'Stars'
 
+yaml_data = YAML.load_file('../hScore/hscore.yaml')
 $totalRoids = 0
 $score = 0
+$hScore = yaml_data['score']
 $maxRoid = 3
 $asteroids = []
 $starray = []
@@ -93,6 +96,7 @@ class GameWindow < Gosu::Window
       end
       @song.pause
       @boom.play
+      @interface.update_score(($score*0.4).round)
       sleep 10
       exit
     else
@@ -109,7 +113,7 @@ class GameWindow < Gosu::Window
       @player.draw
       @interface.draw($lifeRemaining)
       @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 1500, 50, 0, 1, 1, Gosu::Color::WHITE)
-      @interfaceFont.draw_text("B-Score:#{($score * 0.4).round}", 1500, 100, 0, 1, 1, Gosu::Color::WHITE)
+      @interfaceFont.draw_text("B-Score:#{$hScore}", 1500, 100, 0, 1, 1, Gosu::Color::WHITE)
       @interfaceFont.draw_text("Lifes:", 1500, 150, 0, 1, 1, Gosu::Color::WHITE)
 
     end

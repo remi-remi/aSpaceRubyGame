@@ -1,5 +1,6 @@
-class Interface
+require 'yaml'
 
+class Interface
   def initialize
     @image = Gosu::Image.new("../sprite/life.png")
   end
@@ -12,5 +13,18 @@ class Interface
     end
   end
 
+  def update_score(score)
+    # Chargement du fichier YAML contenant le score
+    yaml_data = YAML.load_file('../hScore/hscore.yaml')
+
+    # Comparaison du score avec le score du fichier YAML
+    if score > yaml_data['score']
+      # Mise à jour du score dans le fichier YAML
+      yaml_data['score'] = score
+      File.open('../hScore/hscore.yaml', 'w') do |file|
+        file.write(yaml_data.to_yaml)
+      end
+    end
+  end
 
 end

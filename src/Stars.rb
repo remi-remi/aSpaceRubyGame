@@ -2,10 +2,10 @@ class Stars
   attr_reader :x, :y, :speed, :fuzzy
 
 
-
   Thread.new do
+    sleep 0.3
     13.times do
-      $starray << Stars.new(true)
+     $starray << Stars.new(true)
     end
     while $starray.size < 200
      $starray << Stars.new(false)
