@@ -6,11 +6,13 @@ require_relative 'Asteroid'
 require_relative 'PlayerShip'
 require_relative 'Interface'
 require_relative 'DataClass'
+require_relative 'Stars'
 
 $totalRoids = 0
 $score = 0
 $maxRoid = 3
 $asteroids = []
+$starray = []
 $canSpawn = false
 $roidPart1 = true
 $invincible = false
@@ -85,7 +87,6 @@ class GameWindow < Gosu::Window
       1920, 1080, 0xff222222,
       1920, 0, 0xff222222)
 
-
     if $lifeRemaining <= 0
       $asteroids.each do |roid|
         $asteroids.delete(roid)
@@ -98,6 +99,11 @@ class GameWindow < Gosu::Window
 
       $asteroids.each do |roid|
         roid.draw
+      end
+
+      $starray.each do |star|
+        star.draw
+        star.update
       end
 
       @player.draw
