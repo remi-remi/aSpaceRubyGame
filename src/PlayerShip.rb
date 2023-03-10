@@ -10,14 +10,14 @@ class PlayerShip
   end
 
   def update
-    speed = SPEED
+    speed = 5
     if Gosu.button_down?(Gosu::KbLeftShift)
       speed /= 2
     end
     if Gosu.button_down?(Gosu::KbLeft) && @x > 0
       @x -= speed
     end
-    if Gosu.button_down?(Gosu::KbRight) && @x < 1920 - @image.width
+    if Gosu.button_down?(Gosu::KbRight) && @x < 1480 - @image.width
       @x += speed
     end
     if Gosu.button_down?(Gosu::KbUp) && @y > 0
@@ -37,7 +37,6 @@ class PlayerShip
 
   def collision?(bullet) # returns true if collision
     if Gosu.distance(@x, @y+4, bullet.x, bullet.y) < 10 && $invincible == false
-      puts "test"
       $lifeRemaining -= 1
       bullet.reset
       @roidColideSound.play

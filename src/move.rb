@@ -4,10 +4,9 @@ require 'thread'
 
 require_relative 'Asteroid'
 require_relative 'PlayerShip'
-require_relative 'Lifes'
+require_relative 'Interface'
 require_relative 'DataClass'
 
-SPEED = 5
 $totalRoids = 0
 $score = 0
 $maxRoid = 3
@@ -28,9 +27,9 @@ class GameWindow < Gosu::Window
     @spawn_timer = 0 # Initialisation du compteur
     @song = Gosu::Song.new("../ost/airwolf2.mp3")
     @boom = Gosu::Sample.new("../ost/end.mp3")
-    @interfaceFont = Gosu::Font.new(19, name: "../font/joystixMonospace.otf")
+    @interfaceFont = Gosu::Font.new(24, name: "../font/joystixMonospace.otf")
     @song.play(true)
-    @lifeInterface = Lifes.new()
+    @interface = Interface.new()
     Thread.new do
       sleep 1
       loop do
@@ -80,6 +79,12 @@ class GameWindow < Gosu::Window
   end
 
   def draw
+    draw_quad(
+      1480, 0, 0xff222222,
+      1480, 1080, 0xff222222,
+      1920, 1080, 0xff222222,
+      1920, 0, 0xff222222)
+
 
     if $lifeRemaining <= 0
       $asteroids.each do |roid|
@@ -96,21 +101,10 @@ class GameWindow < Gosu::Window
       end
 
       @player.draw
-      @lifeInterface.draw($lifeRemaining)
-      case
-      when $score < 10
-        @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 540, 8, 0, 1, 1, Gosu::Color::WHITE)
-      when $score < 100
-        @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 525, 8, 0, 1, 1, Gosu::Color::WHITE)
-      when $score < 1000
-        @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 515, 8, 0, 1, 1, Gosu::Color::WHITE)
-      when $score < 10000
-        @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 500, 8, 0, 1, 1, Gosu::Color::WHITE)
-      when $score < 100000
-        @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 485, 8, 0, 1, 1, Gosu::Color::WHITE)
-      when $score < 1000000
-        @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 480, 8, 0, 1, 1, Gosu::Color::WHITE)
-      end
+      @interface.draw($lifeRemaining)
+      @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 1500, 50, 0, 1, 1, Gosu::Color::WHITE)
+      @interfaceFont.draw_text("B-Score:#{($score * 0.4).round}", 1500, 100, 0, 1, 1, Gosu::Color::WHITE)
+      @interfaceFont.draw_text("Lifes:", 1500, 150, 0, 1, 1, Gosu::Color::WHITE)
 
     end
 

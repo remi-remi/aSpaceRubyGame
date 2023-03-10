@@ -1,15 +1,16 @@
-class Lifes
+class Interface
 
   def initialize
     @image = Gosu::Image.new("../sprite/life.png")
   end
 
   def draw(lifeRemaining)
-    $x =10
+    $x =1600
     (lifeRemaining-1).times do
-      @image.draw($x, 10, 20, 2, 2)
-      $x += 20
+      @image.draw($x, 142, 20, 4, 4)
+      $x += 40
     end
   end
+
 
 end
