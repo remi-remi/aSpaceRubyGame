@@ -20,7 +20,7 @@ class Interface
     # Comparaison du score avec le score du fichier YAML
     if score > yaml_data['score']
       # Mise à jour du score dans le fichier YAML
-      yaml_data['score'] = score
+      yaml_data['hight_score'] = score
       File.open('../hScore/hscore.yaml', 'w') do |file|
         file.write(yaml_data.to_yaml)
       end

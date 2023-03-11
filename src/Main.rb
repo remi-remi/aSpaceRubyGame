@@ -9,10 +9,8 @@ require_relative 'Interface'
 require_relative 'DataClass'
 require_relative 'Stars'
 
-yaml_data = YAML.load_file('../hScore/hscore.yaml')
 $totalRoids = 0
 $score = 0
-$hScore = yaml_data['score']
 $maxRoid = 3
 $asteroids = []
 $starray = []
@@ -20,12 +18,16 @@ $canSpawn = false
 $roidPart1 = true
 $invincible = false
 $lifeRemaining = 3
+Thread.new do
+  yaml_data = YAML.load_file('../hScore/hscore.yaml')
+  $hScore = yaml_data['hight_score']
+end
 
 class GameWindow < Gosu::Window
 
   def initialize
-    super 1920, 1080  , fullscreen: true
-    @player = PlayerShip.new(320, 240) # INSTANCE et spawn du joueur
+    super 1920, 1080 # , fullscreen: true
+    @player = PlayerShip.new(320, 240)
     @start_time = Gosu.milliseconds
     @time_elapsed = 0
     @spawn_speed = 3 # Ajout du compteur à 0.2 secondes
@@ -59,7 +61,6 @@ class GameWindow < Gosu::Window
       if asteroid.y >= 1080 or @player.collision?(asteroid) == true
         asteroid.reset
         $score += 1
-
         case
         when $maxRoid < 50
           $maxRoid += 5
