@@ -1,7 +1,6 @@
 class Stars
   attr_reader :x, :y, :speed, :fuzzy
 
-
   Thread.new do
     sleep 0.3
     13.times do

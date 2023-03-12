@@ -10,16 +10,6 @@ require_relative 'DataClass'
 require_relative 'Stars'
 require_relative 'Scrap'
 
-Thread.new do
-  yaml_data = YAML.load_file('../hScore/hscore.yaml')
-  $hScore = yaml_data['hight_score']
-end
-
-
-
-class GameWindow < Gosu::Window
-
-  def initialize
     $totalRoids = 0
     $score = 0
     $maxRoid = 3
@@ -30,8 +20,20 @@ class GameWindow < Gosu::Window
     $roidPart1 = true
     $invincible = false
     $lifeRemaining = 3
+
+Thread.new do
+  yaml_data = YAML.load_file('../hScore/hscore.yaml')
+  $hScore = yaml_data['hight_score']
+end
+
+
+
+class GameWindow < Gosu::Window
+
+  def initialize
+
     super 1920, 1080 # , fullscreen: true
-    @player = PlayerShip.new(320, 240)
+    @player = PlayerShip.new(700, 700)
     @start_time = Gosu.milliseconds
     @time_elapsed = 0
     @spawn_speed = 3 # Ajout du compteur à 0.2 secondes
@@ -113,7 +115,6 @@ class GameWindow < Gosu::Window
       end
 
       $starray.each do |star|
-        pp $starray
         star.draw
         star.update
       end
