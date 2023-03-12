@@ -14,6 +14,7 @@ class Stars
  end
 
   def initialize(fuzzy)
+    puts "init"
     @fuzzy = fuzzy
     @speed = rand(0.8..1)
     @x = rand(0..1480)

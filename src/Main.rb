@@ -8,24 +8,28 @@ require_relative 'PlayerShip'
 require_relative 'Interface'
 require_relative 'DataClass'
 require_relative 'Stars'
+require_relative 'Scrap'
 
-$totalRoids = 0
-$score = 0
-$maxRoid = 3
-$asteroids = []
-$starray = []
-$canSpawn = false
-$roidPart1 = true
-$invincible = false
-$lifeRemaining = 3
 Thread.new do
   yaml_data = YAML.load_file('../hScore/hscore.yaml')
   $hScore = yaml_data['hight_score']
 end
 
+
+
 class GameWindow < Gosu::Window
 
   def initialize
+    $totalRoids = 0
+    $score = 0
+    $maxRoid = 3
+    $asteroids = []
+    $starray = []
+    $scrapArray = []
+    $canSpawn = false
+    $roidPart1 = true
+    $invincible = false
+    $lifeRemaining = 3
     super 1920, 1080 # , fullscreen: true
     @player = PlayerShip.new(320, 240)
     @start_time = Gosu.milliseconds
@@ -44,6 +48,7 @@ class GameWindow < Gosu::Window
         $canSpawn = true
       end
     end
+
   end
 
   def update
@@ -81,6 +86,7 @@ class GameWindow < Gosu::Window
       end
 
     end
+
     @player.update
   end
 
@@ -107,6 +113,7 @@ class GameWindow < Gosu::Window
       end
 
       $starray.each do |star|
+        pp $starray
         star.draw
         star.update
       end

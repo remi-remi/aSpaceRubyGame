@@ -15,10 +15,10 @@ class Interface
 
   def update_score(score)
     # Chargement du fichier YAML contenant le score
-    yaml_data = YAML.load_file('../hScore/hscore.yaml')
+    yaml_data = YAML.safe.load_file('../hScore/hscore.yaml')
 
     # Comparaison du score avec le score du fichier YAML
-    if score > yaml_data['score']
+    if score > yaml_data['hight_score']
       # Mise à jour du score dans le fichier YAML
       yaml_data['hight_score'] = score
       File.open('../hScore/hscore.yaml', 'w') do |file|
