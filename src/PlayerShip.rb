@@ -4,7 +4,7 @@ class PlayerShip
   def initialize(x, y)
     @x = x
     @y = y
-    @image = Gosu::Image.new("../sprite/ship.png")
+    @image = Gosu::Image.new("../sprite/#{$shipname}")
     @shield = Gosu::Image.new("../sprite/ivFrame.png")
     @roidColideSound = Gosu::Sample.new("../ost/choc1.wav")
   end
@@ -36,7 +36,7 @@ class PlayerShip
   end
 
   def collision?(bullet) # returns true if collision
-    if Gosu.distance(@x, @y+4, bullet.x, bullet.y) < 10 && $invincible == false
+    if Gosu.distance(@x, @y+4, bullet.x, bullet.y) < 50 && $invincible == false
       $lifeRemaining -= 1
       bullet.reset
       @roidColideSound.play
@@ -46,6 +46,14 @@ class PlayerShip
         $invincible = false
       end
     end
+  end
+
+  def largeCollision?(bullet) # returns true if collision
+    if Gosu.distance(@x, @y+4, bullet.x, bullet.y) < 15
+      bullet.colide
+      return true
+    end
+    return false
   end
 
 end

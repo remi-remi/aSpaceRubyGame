@@ -27,4 +27,5 @@ class Stars
   def draw
     @image.draw(@x, @y, -10, @size, @size)
   end
+  
 end

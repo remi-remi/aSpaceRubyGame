@@ -1,5 +1,6 @@
 $DEBUG = false
 $d_invincible = false
+$shipname = "ship.png"    # you want an alternative ship? write his name here instead of ship.png
 
 
 # notes Z-index

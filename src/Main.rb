@@ -20,6 +20,8 @@ $canSpawn = false
 $roidPart1 = true
 $invincible = false
 $lifeRemaining = 3
+$playerScrap = 0
+$playerScrapNeed = 3
 
 Thread.new do
   yaml_data = YAML.load_file('../hScore/hscore.yaml')
@@ -29,7 +31,7 @@ end
 class GameWindow < Gosu::Window
 
   def initialize
-    super 1920, 1080 # , fullscreen: true
+    super 1920, 1080 , fullscreen: true
     @player = PlayerShip.new(700, 700)
     @start_time = Gosu.milliseconds
     @time_elapsed = 0
@@ -40,16 +42,24 @@ class GameWindow < Gosu::Window
     @interfaceFont = Gosu::Font.new(24, name: "../font/joystixMonospace.otf")
     @song.play(true)
     @interface = Interface.new()
-    @scrapArray = []
+    $scrapArray = []
+
     $starray = []
     200.times { $starray << Stars.new(true) }
-    #200.times { @scrapArray << Scrap.new }
 
     Thread.new do
       sleep 1
       loop do
         sleep @spawn_speed
         $canSpawn = true
+      end
+    end
+
+    Thread.new do
+      sleep 5
+      loop do
+        sleep rand(5..20)
+        $canScrapSpawn = true
       end
     end
 
@@ -63,6 +73,11 @@ class GameWindow < Gosu::Window
       $canSpawn = false
     end
 
+    if $canScrapSpawn
+      $canScrapSpawn = false
+      $scrapArray << Scrap.new
+    end
+
     @time_elapsed = Gosu.milliseconds - @start_time
 
     $asteroids.each do |asteroid|
@@ -73,9 +88,11 @@ class GameWindow < Gosu::Window
         case
         when $maxRoid < 50
           $maxRoid += 5
-        when $maxRoid < 150
+        when $maxRoid < 400
           $maxRoid += 2
-        when $maxRoid > 200
+        when $maxRoid < 600
+          $maxRoid += 1
+        when $maxRoid > 600
           $maxRoid -= 1
         end
 
@@ -99,30 +116,7 @@ class GameWindow < Gosu::Window
       1920, 1080, 0xff222222,
       1920, 0, 0xff222222)
 
-    if $lifeRemaining <= 0
-      $asteroids.each do |roid|
-        $asteroids.delete(roid)
-      end
-      @song.pause
-      @boom.play
-      @interface.update_score(($score*0.4).round)
-      sleep 10
-      exit
-    else
-      $asteroids.each do |roid|
-        roid.draw
-      end
-
-      $starray.each do |star|
-        star.draw
-        star.update
-      end
-
-      @scrapArray.each do |scrap|
-        scrap.draw
-        scrap.update
-      end
-
+    if $lifeRemaining >= 1
       @player.draw
       @interface.draw($lifeRemaining)
       @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 1500, 50, 0, 1, 1, Gosu::Color::WHITE)
@@ -130,12 +124,6 @@ class GameWindow < Gosu::Window
       @interfaceFont.draw_text("Lifes:", 1500, 150, 0, 1, 1, Gosu::Color::WHITE)
     end
 
-    draw_quad(
-      1480, 0, 0xff222222,
-      1480, 1080, 0xff222222,
-      1920, 1080, 0xff222222,
-      1920, 0, 0xff222222)
-
     if $lifeRemaining <= 0
       $asteroids.each do |roid|
         $asteroids.delete(roid)
@@ -147,29 +135,32 @@ class GameWindow < Gosu::Window
       exit
     else
 
-      $asteroids.each do |roid|
-        roid.draw
+      $scrapArray.each do |scrap|
+        if @player.largeCollision?(scrap) == true
+          if $playerScrap.to_i >= $playerScrapNeed.to_i
+            $playerScrapNeed = ($playerScrapNeed*2)
+            $playerScrap = 0
+            $lifeRemaining +=1
+          end
+        end
       end
 
-      $starray.each do |star|
-          star.draw
-          star.update
-      end
-
-      @scrapArray.each do |scrap|
-        scrap.draw
-        scrap.update
+      ($asteroids + $starray + $scrapArray).each do |obj|
+        obj.update
+        obj.draw
       end
 
       @player.draw
       @interface.draw($lifeRemaining)
-      @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 1500, 50, 0, 1, 1, Gosu::Color::WHITE)
+      @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 1500, 50, 0, 1, 1, Gosu::Color::YELLOW)
       @interfaceFont.draw_text("B-Score:#{$hScore}", 1500, 100, 0, 1, 1, Gosu::Color::WHITE)
-      @interfaceFont.draw_text("Lifes:", 1500, 150, 0, 1, 1, Gosu::Color::WHITE)
+      @interfaceFont.draw_text("Lifes:", 1500, 150, 0, 1, 1, Gosu::Color::RED)
+      @interfaceFont.draw_text("Scraps:#{$playerScrap}/#{$playerScrapNeed}", 1500, 200, 0, 1, 1, Gosu::Color::BLUE)
 
     end
 
   end
+
 end
 
 GameWindow.new.show
