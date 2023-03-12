@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+
 require 'gosu'
 require 'thread'
 require 'yaml'
@@ -10,28 +11,24 @@ require_relative 'DataClass'
 require_relative 'Stars'
 require_relative 'Scrap'
 
-    $totalRoids = 0
-    $score = 0
-    $maxRoid = 3
-    $asteroids = []
-    $starray = []
-    $scrapArray = []
-    $canSpawn = false
-    $roidPart1 = true
-    $invincible = false
-    $lifeRemaining = 3
+$totalRoids = 0
+$score = 0
+$maxRoid = 3
+$asteroids = []
+
+$canSpawn = false
+$roidPart1 = true
+$invincible = false
+$lifeRemaining = 3
 
 Thread.new do
   yaml_data = YAML.load_file('../hScore/hscore.yaml')
   $hScore = yaml_data['hight_score']
 end
 
-
-
 class GameWindow < Gosu::Window
 
   def initialize
-
     super 1920, 1080 # , fullscreen: true
     @player = PlayerShip.new(700, 700)
     @start_time = Gosu.milliseconds
@@ -43,6 +40,11 @@ class GameWindow < Gosu::Window
     @interfaceFont = Gosu::Font.new(24, name: "../font/joystixMonospace.otf")
     @song.play(true)
     @interface = Interface.new()
+    @scrapArray = []
+    $starray = []
+    200.times { $starray << Stars.new(true) }
+    #200.times { @scrapArray << Scrap.new }
+
     Thread.new do
       sleep 1
       loop do
@@ -84,9 +86,7 @@ class GameWindow < Gosu::Window
             @spawn_speed -= 0.001
           end
         end
-
       end
-
     end
 
     @player.update
@@ -109,7 +109,6 @@ class GameWindow < Gosu::Window
       sleep 10
       exit
     else
-
       $asteroids.each do |roid|
         roid.draw
       end
@@ -117,6 +116,49 @@ class GameWindow < Gosu::Window
       $starray.each do |star|
         star.draw
         star.update
+      end
+
+      @scrapArray.each do |scrap|
+        scrap.draw
+        scrap.update
+      end
+
+      @player.draw
+      @interface.draw($lifeRemaining)
+      @interfaceFont.draw_text("Score:#{($score * 0.4).round}", 1500, 50, 0, 1, 1, Gosu::Color::WHITE)
+      @interfaceFont.draw_text("B-Score:#{$hScore}", 1500, 100, 0, 1, 1, Gosu::Color::WHITE)
+      @interfaceFont.draw_text("Lifes:", 1500, 150, 0, 1, 1, Gosu::Color::WHITE)
+    end
+
+    draw_quad(
+      1480, 0, 0xff222222,
+      1480, 1080, 0xff222222,
+      1920, 1080, 0xff222222,
+      1920, 0, 0xff222222)
+
+    if $lifeRemaining <= 0
+      $asteroids.each do |roid|
+        $asteroids.delete(roid)
+      end
+      @song.pause
+      @boom.play
+      @interface.update_score(($score*0.4).round)
+      sleep 10
+      exit
+    else
+
+      $asteroids.each do |roid|
+        roid.draw
+      end
+
+      $starray.each do |star|
+          star.draw
+          star.update
+      end
+
+      @scrapArray.each do |scrap|
+        scrap.draw
+        scrap.update
       end
 
       @player.draw
@@ -128,7 +170,6 @@ class GameWindow < Gosu::Window
     end
 
   end
-
 end
 
 GameWindow.new.show

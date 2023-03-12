@@ -1,13 +1,6 @@
 class Scrap
   attr_reader :x, :y, :speed
 
-  Thread.new do
-    while $scrapArray.size < 200
-     $scrapArray << Scrap.new()
-     sleep 0.5
-    end
- end
-
   def initialize()
     @image = Gosu::Image.new("../sprite/scrap/scrap1.png")
     @speed = rand(0.2..0.8)

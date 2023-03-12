@@ -1,19 +1,7 @@
 class Stars
   attr_reader :x, :y, :speed, :fuzzy
 
-  Thread.new do
-    sleep 0.3
-    13.times do
-     $starray << Stars.new(true)
-    end
-    while $starray.size < 200
-     $starray << Stars.new(false)
-     sleep 0.3
-    end
- end
-
   def initialize(fuzzy)
-    puts "init"
     @fuzzy = fuzzy
     @speed = rand(0.8..1)
     @x = rand(0..1480)
@@ -39,5 +27,4 @@ class Stars
   def draw
     @image.draw(@x, @y, -10, @size, @size)
   end
-
 end
