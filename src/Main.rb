@@ -42,7 +42,6 @@ class GameWindow < Gosu::Window
     @song.play(true)
     @interface = Interface.new()
     $scrapArray = []
-
     $starray = []
     200.times { $starray << Stars.new(true) }
 
