@@ -36,7 +36,7 @@ class PlayerShip
   end
 
   def collision?(bullet) # returns true if collision
-    if Gosu.distance(@x, @y+4, bullet.x, bullet.y) < 50 && $invincible == false
+    if Gosu.distance(@x, @y+4, bullet.x, bullet.y) < 10 && $invincible == false
       $lifeRemaining -= 1
       bullet.reset
       @roidColideSound.play
@@ -49,7 +49,7 @@ class PlayerShip
   end
 
   def largeCollision?(bullet) # returns true if collision
-    if Gosu.distance(@x, @y+4, bullet.x, bullet.y) < 15
+    if Gosu.distance(@x, @y+4, bullet.x, bullet.y) < 50
       bullet.colide
       return true
     end
