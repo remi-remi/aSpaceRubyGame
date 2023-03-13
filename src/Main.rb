@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
-require 'gosu'
-require 'thread'
-require 'yaml'
+require 'bundler/setup'
+Bundler.require
 
 require_relative 'Asteroid'
 require_relative 'PlayerShip'

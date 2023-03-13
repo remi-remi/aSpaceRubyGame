@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    gosu (1.4.5)
+    thread (0.2.2)
+    yaml (0.2.1)
+
+PLATFORMS
+  x64-mingw-ucrt
+
+DEPENDENCIES
+  gosu
+  thread
+  yaml
+
+BUNDLED WITH
+   2.4.8
