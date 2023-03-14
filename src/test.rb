@@ -58,11 +58,11 @@ class Bullet
   def initialize(x, y, image_name, right)
     @x = x
     @y = y
-    @image = Gosu::Image.new('../sprite/blueShard1.png')
+    @@image = Gosu::Image.new('../sprite/blueShard1.png')
     @right = right
     @angle = @right ? 140 : 50
-    @center_x = @image.width / 2
-    @center_y = @image.height / 2
+    @center_x = @@image.width / 2
+    @center_y = @@image.height / 2
     @scale_x = 1
     @scale_y = 1
   end
@@ -77,7 +77,7 @@ class Bullet
   end
 
   def draw
-    @image.draw_rot(@x, @y, 0, @angle, 1, 1, @center_x, @center_y, @scale_x, @scale_y)
+    @@image.draw_rot(@x, @y, 0, @angle, 1, 1, @center_x, @center_y, @scale_x, @scale_y)
   end
 end
 
